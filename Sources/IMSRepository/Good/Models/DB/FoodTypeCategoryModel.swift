@@ -24,17 +24,17 @@ public final class FoodTypeCategoryModel: DatabaseModel, @unchecked Sendable  {
         
     }
     
-    public init(id: UUID?, name: String) {
+    init(id: UUID?, name: String) {
         self.id = id
         self.name = name
     }
 }
 
-public extension FoodTypeCategoryModel {
-    public enum Create_20250718 {
-        public static let schema = "food_type_categories"
+extension FoodTypeCategoryModel {
+    enum Create_20250718 {
+        static let schema = "food_type_categories"
         
-        public static let name: FieldKey = .name
+        static let name: FieldKey = .name
     }
 }
 
@@ -45,7 +45,7 @@ extension FoodTypeCategoryModel: DomainModelConvertible {
 }
 
 extension FoodTypeCategory: ModelConvertible {
-    public func toModel() -> FoodTypeCategoryModel {
+    func toModel() -> FoodTypeCategoryModel {
         .init(id: id, name: name)
     }
 }

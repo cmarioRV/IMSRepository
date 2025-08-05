@@ -21,18 +21,18 @@ public final class GoodProviderModel: DatabaseModel, @unchecked Sendable {
     
     public init() { }
     
-    public init(id: UUID? = nil, goodId: UUID, providerId: UUID) {
+    init(id: UUID? = nil, goodId: UUID, providerId: UUID) {
         self.id = id
         self.$good.id = goodId
         self.$provider.id = providerId
     }
 }
 
-public extension GoodProviderModel {
-    public enum Create_20250707 {
+extension GoodProviderModel {
+    enum Create_20250707 {
         static let schema = "good_provider"
         
-        public static let goodId: FieldKey = .goodId
-        public static let providerId: FieldKey = .providerId
+        static let goodId: FieldKey = .goodId
+        static let providerId: FieldKey = .providerId
     }
 }

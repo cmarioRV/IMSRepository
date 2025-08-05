@@ -42,7 +42,7 @@ public final class ProviderModel: DatabaseModel, @unchecked Sendable {
         
     }
     
-    public init(id: UUID? = nil, createdAt: Date? = nil, updatedAt: Date? = nil, name: String, nit: String?, email: String?, address: String?, phone: String?) {
+    init(id: UUID? = nil, createdAt: Date? = nil, updatedAt: Date? = nil, name: String, nit: String?, email: String?, address: String?, phone: String?) {
         self.id = id
         self.createdAt = createdAt
         self.updatedAt = updatedAt
@@ -55,16 +55,16 @@ public final class ProviderModel: DatabaseModel, @unchecked Sendable {
 }
 
 extension ProviderModel {
-    public enum Create_20250622 {
-        public static let schema = "providers"
+    enum Create_20250622 {
+        static let schema = "providers"
         
-        public static let name: FieldKey = .name
-        public static let nit: FieldKey = .nit
-        public static let email: FieldKey = .email
-        public static let createdAt: FieldKey = .createdAt
-        public static let updatedAt: FieldKey = .updatedAt
-        public static let address: FieldKey = .address
-        public static let phone: FieldKey = .phone
+        static let name: FieldKey = .name
+        static let nit: FieldKey = .nit
+        static let email: FieldKey = .email
+        static let createdAt: FieldKey = .createdAt
+        static let updatedAt: FieldKey = .updatedAt
+        static let address: FieldKey = .address
+        static let phone: FieldKey = .phone
     }
 }
 
@@ -82,7 +82,7 @@ extension ProviderModel: DomainModelConvertible {
 }
 
 extension Provider: ModelConvertible {
-    public func toModel() -> some ProviderModel {
+    func toModel() -> some ProviderModel {
         .init(id: id,
               createdAt: createdAt,
               updatedAt: updatedAt,

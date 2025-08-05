@@ -47,7 +47,7 @@ public final class GoodModel: DatabaseModel, @unchecked Sendable {
         
     }
     
-    public init(id: UUID?, createdAt: Date?, updatedAt: Date?, name: String, description: String?, measurementUnitId: MeasurementUnitModel.IDValue, price: Double, quantity: Double, categoryId: FoodTypeCategoryModel.IDValue) {
+    init(id: UUID?, createdAt: Date?, updatedAt: Date?, name: String, description: String?, measurementUnitId: MeasurementUnitModel.IDValue, price: Double, quantity: Double, categoryId: FoodTypeCategoryModel.IDValue) {
         self.id = id
         self.createdAt = createdAt
         self.updatedAt = updatedAt
@@ -60,24 +60,24 @@ public final class GoodModel: DatabaseModel, @unchecked Sendable {
     }
 }
 
-public extension GoodModel {
-    public enum Create_20250622 {
-        public static let schema = "goods"
+extension GoodModel {
+     enum Create_20250622 {
+        static let schema = "goods"
         
-        public static let name: FieldKey = .name
-        public static let createdAt: FieldKey = .createdAt
-        public static let updatedAt: FieldKey = .updatedAt
-        public static let quantity: FieldKey = .quantity
-        public static let providers: FieldKey = .providers
-        public static let price: FieldKey = .price
-        public static let description: FieldKey = .description
-        public static let categoryId: FieldKey = .categoryId
-        public static let unitId: FieldKey = .unitId
+         static let name: FieldKey = .name
+         static let createdAt: FieldKey = .createdAt
+         static let updatedAt: FieldKey = .updatedAt
+         static let quantity: FieldKey = .quantity
+         static let providers: FieldKey = .providers
+         static let price: FieldKey = .price
+         static let description: FieldKey = .description
+         static let categoryId: FieldKey = .categoryId
+         static let unitId: FieldKey = .unitId
     }
 }
 
 extension Good: ModelConvertible {
-    public func toModel() -> GoodModel {
+    func toModel() -> GoodModel {
         .init(id: self.id,
               createdAt: createdAt,
               updatedAt: updatedAt,
@@ -118,7 +118,7 @@ extension Good: FirestoreConvertible {
 }
 
 extension GoodModel {
-    public static func getAll(on database: any Database) async throws -> [GoodModel] {
+    static func getAll(on database: any Database) async throws -> [GoodModel] {
         let model = try await GoodModel.query(on: database)
             .with(\.$measurementUnit) { measurementUnit in
                 measurementUnit.with(\.$measurementType)
@@ -130,7 +130,7 @@ extension GoodModel {
         return model
     }
     
-    public static func get(withId id: UUID, on database: any Database) async throws -> GoodModel? {
+    static func get(withId id: UUID, on database: any Database) async throws -> GoodModel? {
         let model = try await GoodModel.query(on: database)
             .filter(\.$id == id)
             .with(\.$measurementUnit) { measurementUnit in
@@ -143,7 +143,7 @@ extension GoodModel {
         return model
     }
     
-    public static func get(withName name: String, on database: any Database) async throws -> GoodModel? {
+    static func get(withName name: String, on database: any Database) async throws -> GoodModel? {
         let model = try await GoodModel.query(on: database)
             .filter(\.$name == name)
             .with(\.$measurementUnit) { measurementUnit in

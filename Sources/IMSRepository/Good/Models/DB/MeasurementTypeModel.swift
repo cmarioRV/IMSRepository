@@ -15,7 +15,7 @@ public final class MeasurementTypeModel: DatabaseModel, @unchecked Sendable {
     public var id: UUID?
     
     @Field(key: Create_20250720.name)
-    public var name: String
+    var name: String
     
     @Children(for: \.$measurementType)
     var units: [MeasurementUnitModel]
@@ -24,17 +24,17 @@ public final class MeasurementTypeModel: DatabaseModel, @unchecked Sendable {
         
     }
     
-    public init(id: UUID?, name: String) {
+    init(id: UUID?, name: String) {
         self.id = id
         self.name = name
     }
 }
 
 extension MeasurementTypeModel {
-    public enum Create_20250720 {
-        public static let schema = "measurement_types"
+    enum Create_20250720 {
+        static let schema = "measurement_types"
         
-        public static let name: FieldKey = .name
+        static let name: FieldKey = .name
     }
 }
 
@@ -45,7 +45,7 @@ extension MeasurementTypeModel: DomainModelConvertible {
 }
 
 extension MeasurementType: ModelConvertible {
-    public func toModel() -> MeasurementTypeModel {
+    func toModel() -> MeasurementTypeModel {
         .init(id: id, name: name)
     }
 }

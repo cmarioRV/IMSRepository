@@ -26,10 +26,10 @@ public final class MeasurementUnitModel: DatabaseModel, @unchecked Sendable {
     
     @Parent(key: Create_20250718.measurementTypeId)
     var measurementType: MeasurementTypeModel
-    
+
     public init() { }
     
-    public init(id: UUID?, name: String, abbreviation: String, factor: Double, measurementTypeId: MeasurementTypeModel.IDValue) {
+    init(id: UUID?, name: String, abbreviation: String, factor: Double, measurementTypeId: MeasurementTypeModel.IDValue) {
         self.id = id
         self.name = name
         self.abbreviation = abbreviation
@@ -38,15 +38,15 @@ public final class MeasurementUnitModel: DatabaseModel, @unchecked Sendable {
     }
 }
 
-public extension MeasurementUnitModel {
-    public enum Create_20250718 {
-        public static let schema = "measurement_units"
+extension MeasurementUnitModel {
+    enum Create_20250718 {
+        static let schema = "measurement_units"
         
-        public static let name: FieldKey = .name
-        public static let abbreviation: FieldKey = .abbreviation
-        public static let factor: FieldKey = .factor
-        public static let measurementTypeId: FieldKey = .measurementTypeId
-        public static let goodId: FieldKey = .goodId
+        static let name: FieldKey = .name
+        static let abbreviation: FieldKey = .abbreviation
+        static let factor: FieldKey = .factor
+        static let measurementTypeId: FieldKey = .measurementTypeId
+        static let goodId: FieldKey = .goodId
     }
 }
 
@@ -61,7 +61,7 @@ extension MeasurementUnitModel: DomainModelConvertible {
 }
 
 extension MeasurementUnit: ModelConvertible {
-    public func toModel() -> some MeasurementUnitModel {
+    func toModel() -> some MeasurementUnitModel {
         .init(id: id,
               name: name,
               abbreviation: abbreviation,
