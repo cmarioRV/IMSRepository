@@ -7,9 +7,8 @@
 import Fluent
 
 extension GoodModel {
-    public struct Create: AsyncMigration {
-        public init() {}
-        public func prepare(on database: any FluentKit.Database) async throws {
+    struct Create: AsyncMigration {
+        func prepare(on database: any FluentKit.Database) async throws {
             try await database.schema(GoodModel.schema)
                 .id()
                 .field(GoodModel.Create_20250622.createdAt, .datetime)
@@ -23,7 +22,7 @@ extension GoodModel {
                 .create()
         }
         
-        public func revert(on database: any FluentKit.Database) async throws {
+        func revert(on database: any FluentKit.Database) async throws {
             try await database.schema(GoodModel.schema).delete()
         }
     }

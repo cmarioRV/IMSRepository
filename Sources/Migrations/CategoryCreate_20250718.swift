@@ -7,16 +7,15 @@
 import Fluent
 
 extension FoodTypeCategoryModel {
-    public struct Create: AsyncMigration {
-        public init() {}
-        public func prepare(on database: any FluentKit.Database) async throws {
+    struct Create: AsyncMigration {
+        func prepare(on database: any FluentKit.Database) async throws {
             try await database.schema(FoodTypeCategoryModel.schema)
                 .id()
                 .field(FoodTypeCategoryModel.Create_20250718.name, .string, .required)
                 .create()
         }
         
-        public func revert(on database: any FluentKit.Database) async throws {
+        func revert(on database: any FluentKit.Database) async throws {
             try await database.schema(FoodTypeCategoryModel.schema).delete()
         }
     }

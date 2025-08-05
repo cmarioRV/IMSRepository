@@ -8,9 +8,8 @@
 import Fluent
 
 extension GoodProviderModel {
-    public struct Create: AsyncMigration {
-        public init() {}
-        public func prepare(on database: any FluentKit.Database) async throws {
+    struct Create: AsyncMigration {
+        func prepare(on database: any FluentKit.Database) async throws {
             try await database.schema(GoodProviderModel.schema)
                 .id()
                 .field(GoodProviderModel.Create_20250707.goodId,
@@ -26,7 +25,7 @@ extension GoodProviderModel {
                 .create()
         }
         
-        public func revert(on database: any FluentKit.Database) async throws {
+        func revert(on database: any FluentKit.Database) async throws {
             try await database.schema(GoodProviderModel.schema).delete()
         }
     }

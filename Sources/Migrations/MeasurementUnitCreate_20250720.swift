@@ -7,9 +7,8 @@
 import Fluent
 
 extension MeasurementUnitModel {
-    public struct Create: AsyncMigration {
-        public init() {}
-        public func prepare(on database: any FluentKit.Database) async throws {
+    struct Create: AsyncMigration {
+        func prepare(on database: any FluentKit.Database) async throws {
             try await database.schema(MeasurementUnitModel.schema)
                 .id()
                 .field(MeasurementUnitModel.Create_20250718.name, .string, .required)
@@ -21,7 +20,7 @@ extension MeasurementUnitModel {
                 .create()
         }
         
-        public func revert(on database: any FluentKit.Database) async throws {
+        func revert(on database: any FluentKit.Database) async throws {
             try await database.schema(MeasurementUnitModel.schema).delete()
         }
     }
