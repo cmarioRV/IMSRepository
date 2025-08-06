@@ -25,8 +25,10 @@ extension Data {
     }
 }
 
-struct InvoiceRepository: InvoiceRepositoryProtocol {
-    func getOCRText(from base64Image: String, client: any Client) async throws -> String {
+public struct InvoiceRepository: InvoiceRepositoryProtocol {
+    public init() {}
+    
+    public func getOCRText(from base64Image: String, client: any Client) async throws -> String {
         let visionRequest = createGoogleVisionRequest(base64Image: base64Image)
         
         guard let googleApiKey = Environment.get("GOOGLE_VISION_API_KEY") else {
@@ -36,7 +38,7 @@ struct InvoiceRepository: InvoiceRepositoryProtocol {
         return try await requestGoogleVisionOCR(client, googleApiKey, visionRequest)
     }
     
-    func getInvoiceItems(from text: String, client: any Client) async throws -> [InvoiceGood] {
+    public func getInvoiceItems(from text: String, client: any Client) async throws -> [InvoiceGood] {
         let prompt = PromptBuilder.getInvoiceItems(ocrText: text).getPrompt()
         let request = createOpenAIRequest(systemPrompt: prompt.systemPrompt,
                                                 userPrompt: prompt.userPrompt)
@@ -46,7 +48,7 @@ struct InvoiceRepository: InvoiceRepositoryProtocol {
         return invoice.products
     }
     
-    func getSimilarGoods(between invoiceItems: [InvoiceGood], and goods: [Good], client: any Client) async throws -> PairedGoods {
+    public func getSimilarGoods(between invoiceItems: [InvoiceGood], and goods: [Good], client: any Client) async throws -> PairedGoods {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         let invoiceItemsJsonData = try encoder.encode(invoiceItems)
