@@ -8,7 +8,7 @@ import Foundation
 import NaturalLanguage
 import IMSDomain
 
-public actor EnhancedMatchingEngine {    
+public actor EnhancedMatchingEngine {
     public init() {}
     
     // MARK: - Main Matching Function
@@ -132,7 +132,6 @@ public actor EnhancedMatchingEngine {
     
     private func findExactMatches(productName: String, goods: [Good]) async -> [GoodMatchResult] {
         let normalizedInput = normalizeString(productName)
-        
         return goods.compactMap { good in
             let normalizedProduct = normalizeString(good.name)
             if normalizedInput == normalizedProduct {
@@ -291,10 +290,6 @@ public actor EnhancedMatchingEngine {
     }
     
     private func findLevenshteinMatches(invoiceGood: InvoiceGood, goods: [Good]) async -> [GoodMatchResult] {
-        let dictionary: Dictionary<UUID, String> = Dictionary(uniqueKeysWithValues: goods.compactMap { product in
-            guard let id = product.id else { return nil }
-            return (id, product.name) })
-        
         let levenshteinCalculator = LevenshteinCalculator()
         let levenshteinResults = await levenshteinCalculator.findBestMatches(invoiceGood: invoiceGood, goods: goods, maxResults: 10, normalizedThreshold: 0.7)
         
@@ -482,6 +477,8 @@ public actor EnhancedMatchingEngine {
     }
 }
 
+struct SemaphoreTimeoutError: Error { }
+
 // MARK: - AsyncSemaphore for Concurrency Control
 
 actor AsyncSemaphore {
@@ -492,6 +489,35 @@ actor AsyncSemaphore {
         self.count = value
     }
     
+//    func wait(timeout: TimeInterval = 30) async {
+//        if count > 0 {
+//            count -= 1
+//            return
+//        }
+//        
+//        do {
+//            try await withThrowingTaskGroup(of: Void.self) { group in
+//                group.addTask { [weak self] in
+//                    guard let self = self else { return }
+//                    await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
+//                        Task { [weak self] in
+//                            await self?.addWaiter(continuation)
+//                        }
+//                    }
+//                }
+//                
+//                group.addTask {
+//                    try await Task.sleep(nanoseconds: UInt64(timeout * 1_000_000_000))
+//                    throw SemaphoreTimeoutError()
+//                }
+//                
+//                try await group.next()
+//                group.cancelAll()
+//            }
+//        } catch {}
+//    }
+    
+    @available(*, deprecated, message: "Use wait(timeout:) instead")
     func wait() async {
         if count > 0 {
             count -= 1
@@ -509,6 +535,10 @@ actor AsyncSemaphore {
             let waiter = waiters.removeFirst()
             waiter.resume()
         }
+    }
+    
+    private func addWaiter(_ continuation: CheckedContinuation<Void, Never>) {
+        waiters.append(continuation)
     }
 }
 

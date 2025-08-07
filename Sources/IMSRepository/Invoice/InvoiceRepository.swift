@@ -118,14 +118,14 @@ public struct InvoiceRepository: InvoiceRepositoryProtocol {
     }
     
     public func getInvoiceItems(from text: String, client: any Client) async throws -> [InvoiceGood] {
-//        let prompt = PromptBuilder.getInvoiceItems(ocrText: text).getPrompt()
-//        let request = createOpenAIRequest(systemPrompt: prompt.systemPrompt,
-//                                                userPrompt: prompt.userPrompt)
-//        
-//        let invoice: InvoiceJsonResponseDTO = try await requestOpenAI(requestModel: request,
-//                                                                      client: client)
-//        return invoice.products
-        return ModelsForDev.all()
+        let prompt = PromptBuilder.getInvoiceItems(ocrText: text).getPrompt()
+        let request = createOpenAIRequest(systemPrompt: prompt.systemPrompt,
+                                                userPrompt: prompt.userPrompt)
+        
+        let invoice: InvoiceJsonResponseDTO = try await requestOpenAI(requestModel: request,
+                                                                      client: client)
+        return invoice.products
+//        return ModelsForDev.all()
     }
     
     public func getSimilarGoods(between invoiceItems: [InvoiceGood], and goods: [Good], client: any Client) async throws -> PairedGoods {
@@ -154,18 +154,6 @@ public struct InvoiceRepository: InvoiceRepositoryProtocol {
     }
     
     public func getSimilarGoods(between invoiceItems: [IMSDomain.InvoiceGood], and goods: [IMSDomain.Good]) async throws -> IMSDomain.PairedGoods {
-//        let calculator = ConcurrentLevenshteinCalculator()
-//        let batch = await calculator.calculateDistances(invoiceGoods: invoiceItems, goods: goods)
-//        
-//        var pairedGoods: [PairedGood] = []
-//        let result = batch.forEach { item in
-//            pairedGoods.append(PairedGood(invoiceName: item.invoiceGood.name,
-//                                          candidateMatches: item.results.prefix(3).map { $0.storedGood },
-//                                          quantity: item.invoiceGood.quantity,
-//                                          unitPrice: item.invoiceGood.unitPrice,
-//                                          total: item.invoiceGood.total))
-//        }
-//        return .init(products: pairedGoods)
         let matchingEngine = EnhancedMatchingEngine()
         let items = await matchingEngine.findBestMatches(invoiceGoods: invoiceItems, goods: goods, maxResults: 3, minScore: 0.3, concurrencyLimit: 4)
         return .init(products: items)

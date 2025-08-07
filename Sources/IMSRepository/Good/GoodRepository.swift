@@ -16,7 +16,7 @@ enum GoodRepositoryError: Error {
     case wrongValue(String)
 }
 
-struct GoodRepository: GoodRepositoryProtocol {
+public struct GoodRepository: GoodRepositoryProtocol {
     let goodDao: any GoodDAOProtocol
     let measurementUnitDao: any MeasurementUnitDAOProtocol
     let measurementTypeDao: any MeasurementTypeDAOProtocol
@@ -24,7 +24,21 @@ struct GoodRepository: GoodRepositoryProtocol {
     let categoryDao: any FoodTypeCategoryDAOProtocol
     let goodProviderDao: any GoodProviderDAOProtocol
     
-    func create(_ goods: [Good], with req: Request) async throws -> [Good] {
+    public init(goodDao: any GoodDAOProtocol,
+                measurementUnitDao: any MeasurementUnitDAOProtocol,
+                measurementTypeDao: any MeasurementTypeDAOProtocol,
+                providerDao: any ProviderDAOProtocol,
+                categoryDao: any FoodTypeCategoryDAOProtocol,
+                goodProviderDao: any GoodProviderDAOProtocol) {
+        self.goodDao = goodDao
+        self.measurementUnitDao = measurementUnitDao
+        self.measurementTypeDao = measurementTypeDao
+        self.providerDao = providerDao
+        self.categoryDao = categoryDao
+        self.goodProviderDao = goodProviderDao
+    }
+    
+    public func create(_ goods: [Good], with req: Request) async throws -> [Good] {
         try await req.db.transaction { database in
             for good in goods {
                 let existingGood = try await goodDao.findByName(good.name, on: database)
@@ -39,15 +53,15 @@ struct GoodRepository: GoodRepositoryProtocol {
         }
     }
     
-    func getAll(with req: Vapor.Request) async throws -> [Good] {
+    public func getAll(with req: Vapor.Request) async throws -> [Good] {
         try await goodDao.findAll(on: req.db)
     }
     
-    func getByPrice(minPrice: Double, maxPrice: Double, with req: Request) async throws -> [Good] {
+    public func getByPrice(minPrice: Double, maxPrice: Double, with req: Request) async throws -> [Good] {
         try await goodDao.findByPrice(minPrice: minPrice, maxPrice: maxPrice, on: req.db)
     }
     
-    func delete(_ good: Good, with req: Request) async throws -> Bool {
+    public func delete(_ good: Good, with req: Request) async throws -> Bool {
         let existingGood = try await goodDao.findByName(good.name, on: req.db)
         guard let existingGood = existingGood, let goodId = existingGood.id else {
             return false
