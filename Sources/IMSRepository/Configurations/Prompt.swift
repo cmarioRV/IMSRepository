@@ -7,23 +7,40 @@
 
 fileprivate struct PromptStrings {
     static let getInvoiceSystemPrompt: String = """
-        You are a helpful assistant with expertise in interpreting and matching product names, even when they differ in spelling or form. You are tasked with identifying semantic or approximate matches between items from two different sources, and returning a structured list of results based on the input instructions. Do not explain your reasoning — just return a plain valid JSON with the array of products. Do not use explanations, comments or markdown code blocks (like ```json). Example of the expected JSON:
+        You are a helpful assistant with expertise in interpreting and matching product names, even when they differ in spelling or form. You are tasked with identifying ingredients from a OCR text from an Invoice photo, and returning a structured list of results based on the input instructions. Do not explain your reasoning — just return a plain valid JSON with the array of products, provider information and purchase date (in ISO 8601 format). Do not use explanations, comments or markdown code blocks (like ```json). Example of the expected JSON:
+            {
+            purchaseDate: String,
+            "provider": {
+                "name": String
+                "nit": String
+                "email": String
+                "address": String
+                "phone": String
+            },
+              "goods": [
                 {
-                  "products": [
-                    {
-                      "name": "string",
-                      "quantity": number,
-                      "unit": "string",
-                      "unitPrice": number,
-                      "total": number
-                    }
-                  ]
+                  "name": "string",
+                  "quantity": number,
+                  "unit": "string",
+                  "unitPrice": number,
+                  "total": number
                 }
+              ]
+            }
 """
     
     static let getGoodsFromInvoiceSystemPrompt: String = """
-        You are a helpful assistant with expertise in interpreting and matching product names, even when they differ in spelling or form. You are tasked with identifying semantic or approximate matches between items from two different sources, and returning a structured list of results based on the input instructions. Do not explain your reasoning — just return a plain valid JSON with the array of products. Do not use explanations, comments or markdown code blocks (like ```json). Example of the expected JSON:
+        You are a helpful assistant with expertise in interpreting and matching product names, even when they differ in spelling or form. You are tasked with identifying semantic or approximate matches between items from two different sources, and returning a structured list of results based on the input instructions. Do not explain your reasoning — just return a plain valid JSON with the array of products, provider information and purchase date (in ISO 8601 format). Do not use explanations, comments or markdown code blocks (like ```json). Example of the expected JSON:
+        
             {
+                purchaseDate: String,
+                "provider": {
+                    "name": String
+                    "nit": String
+                    "email": String
+                    "address": String
+                    "phone": String
+                },
                 "products": [
                     {
                         "invoiceName": String,

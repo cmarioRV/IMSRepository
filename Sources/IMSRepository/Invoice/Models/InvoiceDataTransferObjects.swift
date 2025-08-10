@@ -19,6 +19,52 @@ struct ChatMessageDTO: Content {
 }
 
 struct InvoiceJsonResponseDTO: Content {
-    var products: [InvoiceGood]
+    var purchaseDate: String?
+    var goods: [InvoiceGood]
+    var provider: Provider?
 }
 
+extension InvoiceJsonResponseDTO {
+    func toDomainModel() -> Invoice {
+        .init(purchaseDate: purchaseDate,
+              goods: goods,
+              provider: provider)
+    }
+}
+
+struct ProviderDTO: Content {
+    var id: UUID?
+    var createdAt: Date?
+    var updatedAt: Date?
+    var name: String
+    var nit: String?
+    var email: String?
+    var address: String?
+    var phone: String?
+}
+
+//extension ProviderDTO: DomainModelConvertible {
+//    func toDomainModel() -> Provider {
+//        .init(id: id,
+//              createdAt: createdAt,
+//              updatedAt: updatedAt,
+//              name: name,
+//              nit: nit,
+//              email: email,
+//              address: address,
+//              phone: phone)
+//    }
+//}
+//
+//extension Provider: DTOConvertible {
+//    func toDTO() -> ProviderDTO {
+//        .init(id: id,
+//              createdAt: createdAt,
+//              updatedAt: updatedAt,
+//              name: name,
+//              nit: nit,
+//              email: email,
+//              address: address,
+//              phone: phone)
+//    }
+//}

@@ -18,9 +18,9 @@ struct ChatCompletionResponseDTO: Content {
         let finish_reason: String
     }
 
-    let id: String
-    let object: String
-    let created: Int
-    let model: String
+    let id: String?
+    let object: String?
+    let created: Int?
+    let model: String?
     let choices: [ChoiceDTO]
 }

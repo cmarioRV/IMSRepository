@@ -239,7 +239,7 @@ public actor EnhancedMatchingEngine {
             let productSoundex = soundex(good.name)
             let phoneticScore = comparePhonetically(inputSoundex, productSoundex)
             
-            if phoneticScore > 0.6 {
+            if phoneticScore > 0.9 {
                 results.append(GoodMatchResult(
                     candidateGood: good,
                     score: phoneticScore,
