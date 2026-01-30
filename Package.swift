@@ -23,6 +23,7 @@ let package = Package(
         .package(url: "https://github.com/cmarioRV/vapor-firestore.git", branch: "master"),
         .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.52.2"),
         .package(url: "https://github.com/rosecoder/google-cloud-auth-swift.git", from: "1.2.2"),
+        .package(url: "https://github.com/MacPaw/OpenAI.git", branch: "main"),
         .package(name: "IMSDomain", path: "../IMSDomain"),
     ],
     targets: [
@@ -39,6 +40,7 @@ let package = Package(
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
                 .product(name: "GoogleCloudAuth", package: "google-cloud-auth-swift"),
+                .product(name: "OpenAI", package: "OpenAI"),
                 "IMSDomain",
             ]
             ),

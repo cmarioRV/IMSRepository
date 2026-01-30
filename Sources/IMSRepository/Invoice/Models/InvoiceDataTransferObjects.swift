@@ -5,6 +5,7 @@
 //  Created by Mario Rúa on 10/07/25.
 //
 import Vapor
+import OpenAI
 import IMSDomain
 
 struct InvoiceItemDTO: Content {
@@ -18,10 +19,14 @@ struct ChatMessageDTO: Content {
     let content: String
 }
 
-struct InvoiceJsonResponseDTO: Content {
+struct InvoiceJsonResponseDTO: Content, JSONSchemaConvertible {
     var purchaseDate: String?
     var goods: [InvoiceGood]
     var provider: Provider?
+    
+    static let example: Self = {
+        .init(purchaseDate: "14/07/2025", goods: [.init(name: "Cebolla", quantity: 2, unit: "kg", unitPrice: 12000, total: 24000)], provider: .init(id: UUID.generateRandom(), createdAt: .now, updatedAt: .now, name: "Makro", nit: "901000000", email: "email@makro.com", address: "Cra 77 # 77 77", phone: "6045555555"))
+    }()
 }
 
 extension InvoiceJsonResponseDTO {

@@ -5,6 +5,7 @@
 //  Created by Mario Rúa on 5/08/25.
 //
 import Vapor
+import OpenAI
 import IMSDomain
 
 enum InvoiceRepositoryError: Error {
@@ -117,13 +118,39 @@ public struct InvoiceRepository: InvoiceRepositoryProtocol {
 //        return ocrText
     }
     
+//    public func getInvoiceItems(from text: String, client: any Client) async throws -> Invoice {
+//        let prompt = PromptBuilder.getInvoiceItems(ocrText: text).getPrompt()
+//        let request = createOpenAIRequest(systemPrompt: prompt.systemPrompt,
+//                                                userPrompt: prompt.userPrompt)
+//        
+//        let startTime = CFAbsoluteTimeGetCurrent()
+//        let invoice: InvoiceJsonResponseDTO = try await requestChatQueryOpenAI(requestModel: request,
+//                                                                      client: client)
+//        let processingTime = CFAbsoluteTimeGetCurrent() - startTime
+//        print(processingTime)
+//        return invoice.toDomainModel()
+////        return ModelsForDev.all()
+//    }
+    
     public func getInvoiceItems(from text: String, client: any Client) async throws -> Invoice {
         let prompt = PromptBuilder.getInvoiceItems(ocrText: text).getPrompt()
         let request = createOpenAIRequest(systemPrompt: prompt.systemPrompt,
                                                 userPrompt: prompt.userPrompt)
         
-        let invoice: InvoiceJsonResponseDTO = try await requestOpenAI(requestModel: request,
-                                                                      client: client)
+        let worker: OpenAIWorkerProtocol = try OpenAIWorker()
+        
+        let startTime = CFAbsoluteTimeGetCurrent()
+        let invoice: InvoiceJsonResponseDTO = try await worker.request(
+            model: .query(systemMessage: prompt.systemPrompt,
+                          userMessage: prompt.userPrompt,
+                          model: .gpt4_o,
+                          temperature: nil))
+//        let invoice: InvoiceJsonResponseDTO = try await worker.request(
+//            model: .response(userMessage: "\(prompt.systemPrompt). \(prompt.userPrompt)",
+//                             model: .gpt4_o,
+//                             temperature: nil))
+        let processingTime = CFAbsoluteTimeGetCurrent() - startTime
+        print(processingTime)
         return invoice.toDomainModel()
 //        return ModelsForDev.all()
     }
@@ -194,7 +221,6 @@ private extension InvoiceRepository {
     }
     
     private func requestOpenAI<T: Decodable>(requestModel: ChatCompletionRequestDTO, client: any Client) async throws -> T {
-        
         guard let openAiToken = Environment.get("OPENAI_BEARER_TOKEN") else {
             throw InvoiceRepositoryError.notAuthorized("OpenAI API token not found")
         }
